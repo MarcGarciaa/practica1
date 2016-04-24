@@ -1,31 +1,6 @@
 from Notification import Notification
 import telepot
 
-class TelegramChannel(Notification):
-    """Notify, that, via notification file, will deliver notifiations to
-    all channels the user has configured. Two implementations must be provided,
-    first a Mock one, that will simply print on console the sent message, and
-    a Telegram Bot one, that will using Telegram the notification"""
-    def __init__(self):
-        super(TelegramChannel, self).__init__()
-
-    def notify(self, user, message):
-        """Send to "user", the message "message"."""
-        pass
-
-    def broadcast(self, message):
-        """Send to the "broadcast" channel the message "message"."""
-        pass
-
-
-
-
-
-
-
-
----------------------------------------
-
 class AmbrosioBot(telepot.Bot):
     """AmbrosioBot is my telegram bot"""
     def __init__(self, token):
@@ -49,15 +24,26 @@ class AmbrosioBot(telepot.Bot):
             self.sendMessage(self.chat_id, response)
 
 
-
-class TelegramChannel(Channel):
-    """Channel class, received commands from telegram"""
+class TelegramChannel(Notification):
+    """Notify, that, via notification file, will deliver notifiations to
+    all channels the user has configured. Two implementations must be provided,
+    first a Mock one, that will simply print on console the sent message, and
+    a Telegram Bot one, that will using Telegram the notification"""
     def __init__(self, name="TelegramChannel"):
         super(TelegramChannel, self).__init__(name)
         self.bot = AmbrosioBot("134963018:AAEV40aoY1zGK2ECr9kIBYzxDj9NLNDpIRI")
         self.messages = []
         self.bot.set_list(self.messages)
         self.bot.notifyOnMessage()
+
+    def notify(self, user, message):
+        """Send to "user", the message "message"."""
+        pass
+
+    def broadcast(self, message):
+        """Send to the "broadcast" channel the message "message"."""
+        pass
+
 
     def get_msg(self):
         if self.msg_avail():
