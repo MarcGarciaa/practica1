@@ -1,0 +1,64 @@
+Primera part del projecte final. P&C2
+
+Objetiu: Crear l'estructura bàsica i el codi necesari per al projecte final: nfckeg
+
+Estructura: el codi ha de estar orientat a objectes modulars Python, es a dir:
+    - Estructurat en clases  amb herencia (clases derivades de altres clases)
+    - Estructurat i dividit en paquets.
+
+--> Codi llegible i documentat amb comentaris que afegeixin valor.
+
+El programa principal nomes ha de crear una instancia a una clase que representa
+el projecte  i ha de pasar all larg dels arguments de la linia de comandes. Aquesta
+classe l'anomenarem "nfckeg" i realitzarà les seguents operacions:
+      - Llegir fitxer de configuració (ConfigParser)
+      - Analitzar els arguments de la linea de comandes.
+      - Instancies d'objectes necesaris (base de dades, sensors, notificacions,...)
+      - Començar el bucle principal.
+
+El bucle principal (main loop):
+    1) Quan la targeta NFC estigui a prop del lector --> obtenir l'estat del flowmeter
+    2) Quan treguem la NFC del lector --> obtenir l'estat del flowmeter
+    3) Afegir la diferencia entre 1) i 2) a la base de dades.
+    4) Bucle de tornada a començar bucle principal.
+
+El codi constarà de almenys,els seguents paquets:
+    1) Base de dades.
+    2) Sensors.
+    3) Notificacions.
+
+1) Base de dades.
+      Ha de proporcionar almenys les seguents taules:
+                - User:
+                      - name: Name
+                      - tagid: ID of NFC target.
+                      - username: Telegram Username
+      User class ha de proporcionar metodes de captar i definir per la majoria de
+      atributs dela base de dades:
+                - get_data
+                - set_data
+                - etc....
+      --> function save():  guardar en la Base de dades!
+
+2) Sensors
+      Cada seensors ha de tenir una clase! (NFC, flow), amb com a minim, una
+      implementació MOCK que proporcionará una implementació falsa.
+      Cadascuna de les clases ha de tenir els seguents metodes:
+              - setup(): que preparará la classeper controlar el sensor, en el class
+                         del de que el sensor hagi de lleguir cada n sensors, el setup,
+                         la de preparar per tot aixo.
+              - get_data(): retornará les dades llegides pel sensor.
+              - get_cummulative(): si el sensor suporta lectures acumulades retorna
+                                   el llegir acumulat, en cas contrari mostrara error.
+              - reset_cumulative(): esborra les lectures acumulades.
+
+3) Notificiacions
+      Tindrá una clase Notify(), que a traves d'un arxiu de configuració,
+      lliurarà les notificacions a tots els canals que el usuari ha configurat.
+      S'han de proporcionar dues implementacions:
+          - Mock: simulacre que mostrara a la consola el missatge enviat.
+          - Telegram Bot: que enviara notificacions mitjançant Telegram.
+      Notifi():
+              - notify(user,message): enviara al usuari el missatge.
+              - broadcast (message): enviara al canal de emisio(Mock o Telegram)
+                                     el missatge.
