@@ -1,10 +1,10 @@
 from Notification import Notification
 import telepot
 
-class AmbrosioBot(telepot.Bot):
-    """AmbrosioBot is my telegram bot"""
+class BeerBot(telepot.Bot):
+    """BeerBot is my telegram bot"""
     def __init__(self, token):
-        super(AmbrosioBot, self).__init__(token)
+        super(BeerBot, self).__init__(token)
         self.clist = None
         self.chat_id = None
 
@@ -31,7 +31,8 @@ class TelegramChannel(Notification):
     a Telegram Bot one, that will using Telegram the notification"""
     def __init__(self, name="TelegramChannel"):
         super(TelegramChannel, self).__init__(name)
-        self.bot = AmbrosioBot("134963018:AAEV40aoY1zGK2ECr9kIBYzxDj9NLNDpIRI")
+        token = self.cfg["telegram"]["token"]
+        self.bot = BeerBot(token)
         self.messages = []
         self.bot.set_list(self.messages)
         self.bot.notifyOnMessage()
