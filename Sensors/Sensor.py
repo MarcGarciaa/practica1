@@ -2,6 +2,12 @@ class Sensor(object):
     def __init__(self):
         super(Sensor, self).__init__()
 
+    def do(self):
+        pass
+
+    def is_for_you(self, word):
+        pass
+
     def setup():
         """That will prepare the class to monitor the sensor. For instance,
         if the sensor must be read every n seconds, the setup method should

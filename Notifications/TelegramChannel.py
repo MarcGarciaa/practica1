@@ -3,10 +3,11 @@ import telepot
 
 class BeerBot(telepot.Bot):
     """BeerBot is my telegram bot"""
-    def __init__(self, token):
+    def __init__(self, token, usuaris):
         super(BeerBot, self).__init__(token)
         self.clist = None
         self.chat_id = None
+        self.users = usuaris
 
     def set_list(self, clist):
         self.clist = clist
@@ -18,10 +19,12 @@ class BeerBot(telepot.Bot):
             if self.clist is not None:
                 self.clist.append(command)
                 self.chat_id = chat_id
+            else:
+                self.sendMessage(chat_id, "No estas autoritzat!")
 
-    def respond(self, response):
+    def respond(self, message):
         if self.chat_id is not None:
-            self.sendMessage(self.chat_id, response)
+            self.sendMessage(self.chat_id, message)
 
 
 class TelegramChannel(Notification):
@@ -29,22 +32,13 @@ class TelegramChannel(Notification):
     all channels the user has configured. Two implementations must be provided,
     first a Mock one, that will simply print on console the sent message, and
     a Telegram Bot one, that will using Telegram the notification"""
-    def __init__(self, name="TelegramChannel"):
-        super(TelegramChannel, self).__init__(name)
+    def __init__(self, cfg=None, name="TelegramChannel"):
+        super(TelegramChannel, self).__init__(cfg, name)
         token = self.cfg["telegram"]["token"]
-        self.bot = BeerBot(token)
+        self.bot = BeerBot(token, self.cfg["telegram"]["usuaris"])
         self.messages = []
         self.bot.set_list(self.messages)
         self.bot.notifyOnMessage()
-
-    def notify(self, user, message):
-        """Send to "user", the message "message"."""
-        pass
-
-    def broadcast(self, message):
-        """Send to the "broadcast" channel the message "message"."""
-        pass
-
 
     def get_msg(self):
         if self.msg_avail():
@@ -53,7 +47,13 @@ class TelegramChannel(Notification):
     def msg_avail(self):
         return len(self.messages) > 0
 
-    def respond(self, response):
-        if response is None:
-            response = "Command not understood"
-        self.bot.respond(response)
+    def broadcast(self, message):
+        if message is None:
+            message = "Command not understood"
+        self.bot.broadcast(message)
+
+
+
+    def notify(self, user, message):
+        """Send to "user", the message "message"."""
+        pass
