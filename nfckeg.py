@@ -54,8 +54,13 @@ class Nfckeg():
         return message
 
     def mainloop(self):
-        while True:
-            if N
+        chan, command = self.next_command()
+            if command:
+                response = self.execute_command(command)
+                chan.respond(response)
+
+            time.sleep(1)
+            self.update_channels()
 
 
 if __name__ == "__main__"

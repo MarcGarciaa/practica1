@@ -4,6 +4,8 @@ class Flow(Sensor):
     "Flow sensor for Nfckeg"
     def __init__(self):
         super(Flow, self).__init__()
+        self.flow_mesures = list()
+        self.cumulative_flow = 0
 
     def setup():
         """That will prepare the class to monitor the sensor. For instance,
@@ -16,10 +18,10 @@ class Flow(Sensor):
         pass
 
     def get_cummulative():
-        """If the sensor supports cumulative readings returns the amount read,
-        otherwise raise error"""
-        pass
+        for flow in self.flow_mesures:
+            self.cumulative_flow = self.cumulative_flow + flow
+        return self.cumulative_flow
 
     def reset_cumulative():
-        """Clears the cumulative readouts"""
-        pass
+        self.cumulative_flow = 0
+        return self.cumulative_flow
